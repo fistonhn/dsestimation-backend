@@ -1,0 +1,6642 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "DS ESTIMATION BACKEND DOCUMENTATION",
+    "description": "Our story started in 2015 when there was a need of Construction database for helping bidders to bid accurately with reliable information's and estimates in the Rwanda construction industry. Continuous determination, hard work and passion have been constant themes throughout our history and present. As Rwanda Construction industry becomes increasingly important on the global stage, it's our believe that, with our own innovative mindset, we can make the construction industry a better one for national development. So we challenge ourselves to evolve, innovate and experiment to make work easier and faster for everyone as the leading local software brand in the Rwanda construction industry. We are currently the quantities and estimations software dealers which are made in Africa its self initially from Ghana and same technology has been customized to fit Rwanda construction industry and we are super proud to start the race with national development in minds. Today we are privileged to connect with thousands of Engineers and other construction related professionals who do daily estimates or quantities in the construction industry.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "DS ESTIMATION",
+      "url": "http://dsestimation.com",
+      "email": "dsestimation@gmail.com"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "AuthToken": {
+      "type": "apiKey",
+      "name": "auth-token",
+      "in": "header",
+      "description": "The token for authentication"
+    }
+  },
+  "security": [
+    {
+      "AuthToken": []
+    }
+  ],
+
+  "paths": {
+    "/user/all": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all users",
+        "description": "Get all users",
+        "operationId": "getAllUsers",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get a user by id",
+        "description": "Get a user by id",
+        "operationId": "getUserById",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get a loggedin user profile",
+        "description": "Loggedin user get his or her owner profile data",
+        "operationId": "getUserProfile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Register a new user",
+        "description": "Register a new user",
+        "operationId": "registerUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Data Needed to Register Account",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Confirmation link sent",
+
+            "400": {
+              "description": "One or more Fields are missing"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "security": [
+            {
+              "AuthToken": []
+            }
+          ]
+        }
+      }
+    },
+    "/user/verify/signup": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Verify a user",
+        "description": "Verify a user",
+        "operationId": "verifyUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Token that was sent to the registered user email",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserVerify"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "You are verified successfully"
+          },
+          "400": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "AuthToken": []
+          }
+        ]
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login a user",
+        "description": "Login a user",
+        "operationId": "loginUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User Data needed to login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "You are logged in successfully"
+          },
+          "400": {
+            "description": "Invalid credentials"
+          },
+          "401": {
+            "description": "Invalid Email or password"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "AuthToken": []
+          }
+        ]
+      }
+    },
+    "/user/logout": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Logout a user",
+        "description": "Logout a user",
+        "operationId": "logoutUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "You are logged out successfully"
+          },
+          "400": {
+            "description": "Already logged out"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/{id}/delete": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete a user",
+        "description": "Delete a user",
+        "operationId": "deleteUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/account/delete": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete a My account",
+        "description": "Delete a My account",
+        "operationId": "deleteMyAccount",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "My account deleted successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/{id}/role": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update a user role",
+        "description": "Update a user role",
+        "operationId": "updateUserRole",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User Data needed to update role",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRole"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User role updated successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/account/{id}/activate": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Activate or disactivate a user account",
+        "description": "Activate a user account",
+        "operationId": "activateUserAccount",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User account activated successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/account/{id}/update": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update a user account",
+        "description": "Update a user account",
+        "operationId": "updateUserAccount",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User Data needed to update account",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserAccount"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User account updated successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/session/{id}/renew-token": {
+      "patch": {
+        "tags": ["Session"],
+        "summary": "Renew a session token",
+        "description": "Renew a session token",
+        "operationId": "renewSessionToken",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Session id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session token renewed successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/forgot-password": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Send a password reset email",
+        "description": "Send a password reset email",
+        "operationId": "sendPasswordResetEmail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User Data needed to send password reset email",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserForgotPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset email sent successfully"
+          },
+          "403": {
+            "description": "Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/reset-password/{token}/{email}": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Reset a user password",
+        "description": "Reset a user password",
+        "operationId": "resetUserPassword",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "Password reset token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "path",
+            "description": "User email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User Data needed to reset password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserResetPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User password reset successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+    "/user/project/create": {
+      "post": {
+        "tags": ["Project Routes"],
+        "summary": "Create a new project",
+        "description": "Create a new project",
+        "operationId": "createProject",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Project object that needs to be added to the create project",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Project created successfully"
+          },
+          "400": {
+            "description": "Some project field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Project already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/all": {
+      "get": {
+        "tags": ["Project Routes"],
+        "summary": "Get all projects",
+        "description": "Get all projects",
+        "operationId": "getAllProjects",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Projects retrieved successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{id}": {
+      "get": {
+        "tags": ["Project Routes"],
+        "summary": "Get a project by id",
+        "description": "Get a project by id",
+        "operationId": "getProjectById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the project to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project retrieved successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{id}/update": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Update a project by id",
+        "description": "Update a project by id",
+        "operationId": "updateProjectById",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the project to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Project object that needs to be added to update project, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project updated successfully"
+          },
+          "400": {
+            "description": "Some project field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "409": {
+            "description": "Project already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{id}/duplicate": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "duplicate a project",
+        "description": "duplicate a project",
+        "operationId": "duplicateProjectById",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the project to duplicate",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project duplicate successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{id}/delete": {
+      "delete": {
+        "tags": ["Project Routes"],
+        "summary": "Delete a project by id",
+        "description": "Delete a project by id",
+        "operationId": "deleteProjectById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the project to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project deleted successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/activity/add": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Add an activity category or project data to a project",
+        "description": "Add an categoryestimation to a project",
+        "operationId": "addEstimationCategoryToProject",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "projectId of the project to add category or project data too",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add estimation activity or category or project data to the project by adding it name",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ActivityName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Activity added successfully"
+          },
+          "400": {
+            "description": "Some activity field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "409": {
+            "description": "activity already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/activity/remove": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Remove an activity category from a project",
+        "description": "Remove an estimation category from a project",
+        "operationId": "removeEstimationCategoryFromProject",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "projectId of the project to remove estimation",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "remove estimation from the project by removing it name",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ActivityName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Activity removed successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/add": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Add an estimation or project data to a project",
+        "description": "Add an estimation to a project",
+        "operationId": "addEstimationToProject",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "projectId of the project to add estimation or project data too",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "add estimation or project data to the project by adding it name",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EstimationName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation added successfully"
+          },
+          "400": {
+            "description": "Some estimation field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "409": {
+            "description": "Estimation already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/remove": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Remove an estimation or specific project from a project",
+        "description": "Remove an estimation or specific project data from a project",
+        "operationId": "removeEstimationFromProject",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "projectId of the project to remove estimation",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "estimationName",
+            "in": "body",
+            "description": "remove estimation from the project by removing it name",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EstimationName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation removed successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}": {
+      "get": {
+        "tags": ["Project Routes"],
+        "summary": "Get an estimation of the specific project",
+        "description": "Get an estimation from a project",
+        "operationId": "GetEstimationFromProject",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to get estimation from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Returned successfully"
+          },
+          "400": {
+            "description": "Some estimation doesn't exist"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/update": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Update an estimation of the specific project from a project",
+        "description": "Update an estimation from a project",
+        "operationId": "updateEstimationFromProject",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to update estimation",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation object that needs to be added to update estimation, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EstimationUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation updated successfully"
+          },
+          "400": {
+            "description": "Some estimation field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "409": {
+            "description": "Estimation already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/equipment/add": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Add Equipment to an estimation of the given project",
+        "description": "Add Equipment to an estimation of the given project",
+        "operationId": "addEquipmentToProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to get estimation",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add equipment to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipments object that needs to be added to the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EquipmentOrMaterial"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Added successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/equipment/remove": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Remove Equipment from an estimation of the given project",
+        "description": "Remove Equipment from an estimation of the given project",
+        "operationId": "removeEquipmentFromProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to get estimation",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove equipment from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipments object that needs to be removed from the estimation, you can remove one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EquipmentOrMaterial"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removed successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/equipment/edit": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Edit equipment to estimation",
+        "description": "Edit equipment from estimation of project",
+        "operationId": "editProjectEstimationEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to get estimation",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit equipement from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to edit equipment of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateEquipmentEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment updated successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/material/add": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Add material to estimation of project",
+        "description": "Add material to estimation of given project",
+        "operationId": "addMaterialToProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to add material to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add material to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be added to the estimation",
+            "schema": {
+              "$ref": "#/definitions/AddMaterialEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material added successfully"
+          },
+          "400": {
+            "description": "Some material name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/material/remove": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Remove Material from estimation of project",
+        "description": "Remove material from estimation of given project",
+        "operationId": "removeMaterialFromProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to remove material from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove material from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be removed from the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddMaterialEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material removed successfully"
+          },
+          "400": {
+            "description": "Some Material name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/material/edit": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Edit material for given estimation of project",
+        "description": "Edit material for given to estimation of given project",
+        "operationId": "EditMaterialToProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to edit material from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit material from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to edit material of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateMaterialEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material updated successfully"
+          },
+          "400": {
+            "description": "Some material field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/labour/add": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Add labour to estimation of project",
+        "description": "Add labour to estimation of given project",
+        "operationId": "addLabourToProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to add labour to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add labour to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be added to the estimation",
+            "schema": {
+              "$ref": "#/definitions/AddLabourEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour added successfully"
+          },
+          "400": {
+            "description": "Some labour name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/labour/remove": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Remove Labour from estimation of project",
+        "description": "Remove labour from estimation of given project",
+        "operationId": "removeLabourFromProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to remove labour from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove labour from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be removed from the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddLabourEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour removed successfully"
+          },
+          "400": {
+            "description": "Some Labour name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/labour/edit": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Edit Labour for given estimation of project",
+        "description": "Edit Labour for given to estimation of given project",
+        "operationId": "editLabourProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to edit labour from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit labour from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to edit labour of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateLabourEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour updated successfully"
+          },
+          "400": {
+            "description": "Some labour field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/subcontractor/add": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Add subcontractor to estimation of project",
+        "description": "Add subcontractor to estimation of given project",
+        "operationId": "addSubcontractorToProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to add subcontractor to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add subcontractor to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "subcontractor object that needs to be added to the estimation",
+            "schema": {
+              "$ref": "#/definitions/AddSubContractorEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "subcontractor added successfully"
+          },
+          "400": {
+            "description": "Some subcontractor name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/subcontractor/remove": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Remove Subcontractor from estimation of project",
+        "description": "Remove Subcontractor from estimation of given project",
+        "operationId": "removeSubcontractorFromProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to remove subcontractor from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove subcontractor from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "subcontractor object that needs to be removed from the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddSubContractorEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor removed successfully"
+          },
+          "400": {
+            "description": "Some Subcontractor name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/project/{projectId}/estimation/{id}/subcontractor/edit": {
+      "patch": {
+        "tags": ["Project Routes"],
+        "summary": "Edit subcontractor for given estimation of project",
+        "description": "Edit subcontractor for given to estimation of given project",
+        "operationId": "editSubcontractorProjectEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of the project to edit subcontractor from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit subcontractor from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "subcontractor object that needs to subcontractor labour of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateSubcontractorEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor updated successfully"
+          },
+          "400": {
+            "description": "Some Subcontractor field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/estimation/all": {
+      "get": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Get all estimations created by the user",
+        "description": "Get all estimations",
+        "operationId": "getAllEstimations",
+        "produces": ["application/json"],
+
+        "responses": {
+          "200": {
+            "description": "Estimations retrieved successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}": {
+      "get": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Get single estimation created by the user",
+        "description": "Get an estimation",
+        "operationId": "getEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation retrieved successfully"
+          },
+          "401": {
+            "description": "Not Allowed"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/create": {
+      "post": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Create an estimation",
+        "description": "Create an estimation",
+        "operationId": "createEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation object that needs to be added to create estimation",
+            "schema": {
+              "$ref": "#/definitions/EstimationCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Estimation created successfully"
+          },
+          "400": {
+            "description": "Some estimation field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Estimation already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/update": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Update an estimation",
+        "description": "Update an estimation",
+        "operationId": "updateEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to update",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation object that needs to be updated, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UserEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation updated successfully"
+          },
+          "400": {
+            "description": "Some estimation field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/delete": {
+      "delete": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Delete an estimation",
+        "description": "Delete an estimation",
+        "operationId": "deleteEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/duplicate": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Duplicate an estimation",
+        "description": "Duplicate an estimation",
+        "operationId": "DuplicateEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to Duplicate",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Duplicate successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/equipment/add": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Add equipment to estimation",
+        "description": "Add equipment to estimation",
+        "operationId": "addEquipmentToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add equipment to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be added to the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EquipmentOrMaterial"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment added successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/equipment/edit": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Add equipment to estimation",
+        "description": "Add equipment to estimation",
+        "operationId": "EditEquipmentToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit equipement from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to edit equipment of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateEquipmentEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment updated successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/equipment/remove": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Remove equipment from estimation",
+        "description": "Remove equipment from estimation",
+        "operationId": "removeEquipmentFromEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove equipment from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be removed from the estimation, you can remove one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EquipmentOrMaterial"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment removed successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/material/add": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Add material to estimation",
+        "description": "Add material to estimation",
+        "operationId": "addMaterialToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add equipment to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be added to the estimation",
+            "schema": {
+              "$ref": "#/definitions/AddMaterialEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material added successfully"
+          },
+          "400": {
+            "description": "Some material name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/material/remove": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Remove Material from estimation",
+        "description": "Remove material from estimation",
+        "operationId": "removeMaterialFromEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove material from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be removed from the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddMaterialEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material removed successfully"
+          },
+          "400": {
+            "description": "Some Material name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/material/edit": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Edit material for given estimation",
+        "description": "Edit material for given to estimation",
+        "operationId": "EditMaterialToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit material from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to edit material of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateMaterialEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material updated successfully"
+          },
+          "400": {
+            "description": "Some material field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/labour/add": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Add labour to estimation",
+        "description": "Add labour to estimation",
+        "operationId": "addLabourToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add labour to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be added to the estimation",
+            "schema": {
+              "$ref": "#/definitions/AddLabourEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour added successfully"
+          },
+          "400": {
+            "description": "Some labour name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/labour/remove": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Remove Labour from estimation",
+        "description": "Remove labour from estimation",
+        "operationId": "removeLabourFromEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove labour from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be removed from the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddLabourEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour removed successfully"
+          },
+          "400": {
+            "description": "Some Labour name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/labour/edit": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Edit Labour for given estimation",
+        "description": "Edit Labour for given to estimation",
+        "operationId": "EditLabourToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit labour from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to edit labour of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateLabourEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour updated successfully"
+          },
+          "400": {
+            "description": "Some labour field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/subcontractor/add": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Add subcontractor to estimation",
+        "description": "Add subcontractor to estimation",
+        "operationId": "addsubcontractorToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add labour to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "subcontractor object that needs to be added to the estimation",
+            "schema": {
+              "$ref": "#/definitions/AddSubContractorEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "subcontractor added successfully"
+          },
+          "400": {
+            "description": "Some subcontractor name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/subcontractor/remove": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Remove Subcontractor from estimation",
+        "description": "Remove Subcontractor from estimation",
+        "operationId": "removesubcontractorFromEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove subcontractor from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "subcontractor object that needs to be removed from the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddSubContractorEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor removed successfully"
+          },
+          "400": {
+            "description": "Some Subcontractor name is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimation/{id}/subcontractor/edit": {
+      "patch": {
+        "tags": ["User Estimation Routes"],
+        "summary": "Edit subcontractor for given estimation",
+        "description": "Edit subcontractor for given to estimation",
+        "operationId": "EditSubcontractorToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to edit subcontractor from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "subcontractor object that needs to subcontractor labour of estimation, you can edit one or more fields",
+            "schema": {
+              "$ref": "#/definitions/UpdateSubcontractorEstimation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor updated successfully"
+          },
+          "400": {
+            "description": "Some Subcontractor field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimation/unverified/all": {
+      "get": {
+        "tags": ["Owner Estimation Routes"],
+        "summary": "Get all unverified estimations from our database",
+        "description": "Get all unverified estimations from our database",
+        "operationId": "getAllUnverifiedEstimations",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Estimations Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimation/create": {
+      "post": {
+        "tags": ["Owner Estimation Routes"],
+        "summary": "Create an estimation",
+        "description": "Create an estimation",
+        "operationId": "createEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation object that needs to be created",
+            "schema": {
+              "$ref": "#/definitions/EstimationCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation created successfully"
+          },
+          "400": {
+            "description": "Some estimation field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimation/{id}/update": {
+      "patch": {
+        "tags": ["Owner Estimation Routes"],
+        "summary": "Update an estimation",
+        "description": "Update an estimation",
+        "operationId": "updateEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation object that needs to be updated, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/EstimationUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation updated successfully"
+          },
+          "400": {
+            "description": "Some estimation field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimation/{id}/delete": {
+      "delete": {
+        "tags": ["Owner Estimation Routes"],
+        "summary": "Delete an estimation",
+        "description": "Delete an estimation",
+        "operationId": "deleteEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimation/{id}/add-equipment": {
+      "patch": {
+        "tags": ["Owner Estimation Routes"],
+        "summary": "Add equipment to an estimation",
+        "description": "Add equipment to an estimation",
+        "operationId": "addEquipmentToEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to add equipment to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be added to the estimation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EquipmentOrMaterialId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment added successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimation/{id}/remove-equipment": {
+      "patch": {
+        "tags": ["Owner Estimation Routes"],
+        "summary": "Remove equipment from an estimation",
+        "description": "Remove equipment from an estimation",
+        "operationId": "removeEquipmentFromEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to remove equipment from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be removed from the estimation, you can remove one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EquipmentOrMaterialId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment removed successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/equipment/create": {
+      "post": {
+        "tags": ["Default Equipment Routes"],
+        "summary": "Create an equipment",
+        "description": "Create an equipment",
+        "operationId": "createEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be created equipment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Equipment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment created successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/equipment/{id}/update": {
+      "patch": {
+        "tags": ["Default Equipment Routes"],
+        "summary": "Update an equipment",
+        "description": "Update an equipment",
+        "operationId": "updateEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be updated default equipment, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Equipment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment updated successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/equipment/{id}/delete": {
+      "delete": {
+        "tags": ["Default Equipment Routes"],
+        "summary": "Delete an equipment",
+        "description": "Delete an equipment",
+        "operationId": "deleteEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/material/create": {
+      "post": {
+        "tags": ["Default Material Routes"],
+        "summary": "Create a material",
+        "description": "Create a material",
+        "operationId": "createMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be created material",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Material"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material created successfully"
+          },
+          "400": {
+            "description": "Some material field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/material/{id}/update": {
+      "patch": {
+        "tags": ["Default Material Routes"],
+        "summary": "Update a material",
+        "description": "Update a material",
+        "operationId": "updateMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be updated default material, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Material"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material updated successfully"
+          },
+          "400": {
+            "description": "Some material field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/material/{id}/delete": {
+      "delete": {
+        "tags": ["Default Material Routes"],
+        "summary": "Delete a material",
+        "description": "Delete a material",
+        "operationId": "deleteMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/labour/create": {
+      "post": {
+        "tags": ["Default Labour Routes"],
+        "summary": "Create a labour",
+        "description": "Create a labour",
+        "operationId": "createLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be created labour",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Labour"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour created successfully"
+          },
+          "400": {
+            "description": "Some labour field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/labour/{id}/update": {
+      "patch": {
+        "tags": ["Default Labour Routes"],
+        "summary": "Update a labour",
+        "description": "Update a labour",
+        "operationId": "updateLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be updated default labour, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Labour"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour updated successfully"
+          },
+          "400": {
+            "description": "Some labour field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/labour/{id}/delete": {
+      "delete": {
+        "tags": ["Default Labour Routes"],
+        "summary": "Delete a labour",
+        "description": "Delete a labour",
+        "operationId": "deleteLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/subcontractor/create": {
+      "post": {
+        "tags": ["Default Subcontractor Routes"],
+        "summary": "Create a subcontractor",
+        "description": "Create a subcontractor",
+        "operationId": "createSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Subcontractor object that needs to be created subcontractor",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Subcontractor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor created successfully"
+          },
+          "400": {
+            "description": "Some subcontractor field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/subcontractor/{id}/update": {
+      "patch": {
+        "tags": ["Default Subcontractor Routes"],
+        "summary": "Update a subcontractor",
+        "description": "Update a subcontractor",
+        "operationId": "updateSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Subcontractor object that needs to be updated default subcontractor, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Subcontractor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor updated successfully"
+          },
+          "400": {
+            "description": "Some subcontractor field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/subcontractor/{id}/delete": {
+      "delete": {
+        "tags": ["Default Subcontractor Routes"],
+        "summary": "Delete a subcontractor",
+        "description": "Delete a subcontractor",
+        "operationId": "deleteSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/unit/create": {
+      "post": {
+        "tags": ["Default Unit Routes"],
+        "summary": "Create a unit",
+        "description": "Create a unit",
+        "operationId": "createUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Unit object that needs to be created unit",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit created successfully"
+          },
+          "400": {
+            "description": "Some unit field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/unit/{id}/update": {
+      "patch": {
+        "tags": ["Default Unit Routes"],
+        "summary": "Update a unit",
+        "description": "Update a unit",
+        "operationId": "updateUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the unit to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Unit object that needs to be updated unit, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit updated successfully"
+          },
+          "400": {
+            "description": "Some unit field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Unit not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/unit/{id}/delete": {
+      "delete": {
+        "tags": ["Default Unit Routes"],
+        "summary": "Delete a unit",
+        "description": "Delete a unit",
+        "operationId": "deleteUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the unit to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Unit not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/ourSupplier/create": {
+      "post": {
+        "tags": ["Default Supplier Routes"],
+        "summary": "Create a our supplier",
+        "description": "Create a our supplier",
+        "operationId": "createOurSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Our supplier object that needs to be created our supplier",
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Our supplier created successfully"
+          },
+          "400": {
+            "description": "Some our supplier field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/ourSupplier/{id}/update": {
+      "patch": {
+        "tags": ["Default Supplier Routes"],
+        "summary": "Update a our supplier",
+        "description": "Update a our supplier",
+        "operationId": "updateOurSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the our supplier to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Our supplier object that needs to be updated our supplier, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Our supplier updated successfully"
+          },
+          "400": {
+            "description": "Some our supplier field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Our supplier not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/ourSupplier/{id}/delete": {
+      "delete": {
+        "tags": ["Default Supplier Routes"],
+        "summary": "Delete a our supplier",
+        "description": "Delete a our supplier",
+        "operationId": "deleteOurSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the our supplier to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Our supplier deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Our supplier not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/equipment/all": {
+      "get": {
+        "tags": ["Client Equipment Routes"],
+        "summary": "Get all equipment",
+        "description": "Get all equipment",
+        "operationId": "getAllEquipment",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Equipment Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/equipment/{id}": {
+      "get": {
+        "tags": ["Client Equipment Routes"],
+        "summary": "Get single equipment",
+        "description": "Get single equipment",
+        "operationId": "getEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/equipment/create": {
+      "post": {
+        "tags": ["Client Equipment Routes"],
+        "summary": "Create an equipment",
+        "description": "Create an equipment",
+        "operationId": "createEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be created equipment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Equipment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment created successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/equipment/{id}/update": {
+      "patch": {
+        "tags": ["Client Equipment Routes"],
+        "summary": "Update an equipment",
+        "description": "Update an equipment",
+        "operationId": "updateEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment object that needs to be updated Client equipment, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Equipment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment updated successfully"
+          },
+          "400": {
+            "description": "Some equipment field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/equipment/{id}/delete": {
+      "delete": {
+        "tags": ["Client Equipment Routes"],
+        "summary": "Delete an equipment",
+        "description": "Delete an equipment",
+        "operationId": "deleteEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/supplier/all": {
+      "get": {
+        "tags": ["Client Supplier Routes"],
+        "summary": "Get all suppliers",
+        "description": "Get all suppliers",
+        "operationId": "getAllSuppliers",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Suppliers Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/supplier/{id}": {
+      "get": {
+        "tags": ["Client Supplier Routes"],
+        "summary": "Get single supplier",
+        "description": "Get single supplier",
+        "operationId": "getSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the supplier to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Supplier not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/supplier/create": {
+      "post": {
+        "tags": ["Client Supplier Routes"],
+        "summary": "Create a supplier",
+        "description": "Create a supplier",
+        "operationId": "createSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Supplier object that needs to be created supplier",
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier created successfully"
+          },
+          "400": {
+            "description": "Some supplier field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/supplier/{id}/update": {
+      "patch": {
+        "tags": ["Client Supplier Routes"],
+        "summary": "Update a supplier",
+        "description": "Update a supplier",
+        "operationId": "updateSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the supplier to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Supplier object that needs to be updated supplier",
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier updated successfully"
+          },
+          "400": {
+            "description": "Some supplier field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Supplier not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/supplier/{id}/delete": {
+      "delete": {
+        "tags": ["Client Supplier Routes"],
+        "summary": "Delete a supplier",
+        "description": "Delete a supplier",
+        "operationId": "deleteSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the supplier to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Supplier not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/material/all": {
+      "get": {
+        "tags": ["Client Material Routes"],
+        "summary": "Get all materials",
+        "description": "Get all materials",
+        "operationId": "getAllMaterials",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Materials Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/material/{id}": {
+      "get": {
+        "tags": ["Client Material Routes"],
+        "summary": "Get single material",
+        "description": "Get single material",
+        "operationId": "getMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/material/create": {
+      "post": {
+        "tags": ["Client Material Routes"],
+        "summary": "Create a material",
+        "description": "Create a material",
+        "operationId": "createMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be created material",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Material"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material created successfully"
+          },
+          "400": {
+            "description": "Some material field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/material/{id}/update": {
+      "patch": {
+        "tags": ["Client Material Routes"],
+        "summary": "Update a material",
+        "description": "Update a material",
+        "operationId": "updateMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material object that needs to be updated Client material, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Material"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material updated successfully"
+          },
+          "400": {
+            "description": "Some material field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/material/{id}/delete": {
+      "delete": {
+        "tags": ["Client Material Routes"],
+        "summary": "Delete a material",
+        "description": "Delete a material",
+        "operationId": "deleteMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/labour/all": {
+      "get": {
+        "tags": ["Client Labour Routes"],
+        "summary": "Get all labour",
+        "description": "Get all labour",
+        "operationId": "getAllLabour",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Labour Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/labour/{id}": {
+      "get": {
+        "tags": ["Client Labour Routes"],
+        "summary": "Get single labour",
+        "description": "Get single labour",
+        "operationId": "getLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/labour/create": {
+      "post": {
+        "tags": ["Client Labour Routes"],
+        "summary": "Create a labour",
+        "description": "Create a labour",
+        "operationId": "createLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be created labour",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Labour"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour created successfully"
+          },
+          "400": {
+            "description": "Some labour field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/labour/{id}/update": {
+      "patch": {
+        "tags": ["Client Labour Routes"],
+        "summary": "Update a labour",
+        "description": "Update a labour",
+        "operationId": "updateLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour object that needs to be updated Client labour, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Labour"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour updated successfully"
+          },
+          "400": {
+            "description": "Some labour field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/labour/{id}/delete": {
+      "delete": {
+        "tags": ["Client Labour Routes"],
+        "summary": "Delete a labour",
+        "description": "Delete a labour",
+        "operationId": "deleteLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/subcontractor/all": {
+      "get": {
+        "tags": ["Client Subcontractor Routes"],
+        "summary": "Get all subcontractors",
+        "description": "Get all subcontractors",
+        "operationId": "getAllSubcontractors",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Subcontractors Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/subcontractor/{id}": {
+      "get": {
+        "tags": ["Client Subcontractor Routes"],
+        "summary": "Get single subcontractor",
+        "description": "Get single subcontractor",
+        "operationId": "getSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/subcontractor/create": {
+      "post": {
+        "tags": ["Client Subcontractor Routes"],
+        "summary": "Create a subcontractor",
+        "description": "Create a subcontractor",
+        "operationId": "createSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Subcontractor object that needs to be created subcontractor",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Subcontractor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor created successfully"
+          },
+          "400": {
+            "description": "Some subcontractor field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/subcontractor/{id}/update": {
+      "patch": {
+        "tags": ["Client Subcontractor Routes"],
+        "summary": "Update a subcontractor",
+        "description": "Update a subcontractor",
+        "operationId": "updateSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Subcontractor object that needs to be updated Client subcontractor, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Subcontractor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor updated successfully"
+          },
+          "400": {
+            "description": "Some subcontractor field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/subcontractor/{id}/delete": {
+      "delete": {
+        "tags": ["Client Subcontractor Routes"],
+        "summary": "Delete a subcontractor",
+        "description": "Delete a subcontractor",
+        "operationId": "deleteSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/unit/all": {
+      "get": {
+        "tags": ["Client Unit Routes"],
+        "summary": "Get all units",
+        "description": "Get all units",
+        "operationId": "getAllUnits",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Units Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/unit/{id}": {
+      "get": {
+        "tags": ["Client Unit Routes"],
+        "summary": "Get single unit",
+        "description": "Get single unit",
+        "operationId": "getUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the unit to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Unit not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/unit/create": {
+      "post": {
+        "tags": ["Client Unit Routes"],
+        "summary": "Create a unit",
+        "description": "Create a unit",
+        "operationId": "createUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Unit object that needs to be created unit",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit created successfully"
+          },
+          "400": {
+            "description": "Some unit field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/unit/{id}/update": {
+      "patch": {
+        "tags": ["Client Unit Routes"],
+        "summary": "Update a unit",
+        "description": "Update a unit",
+        "operationId": "updateUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the unit to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Unit object that needs to be updated unit, you can update one or more fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit updated successfully"
+          },
+          "400": {
+            "description": "Some unit field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Unit not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/unit/{id}/delete": {
+      "delete": {
+        "tags": ["Client Unit Routes"],
+        "summary": "Delete a unit",
+        "description": "Delete a unit",
+        "operationId": "deleteUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the unit to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Unit not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/user/estimationCategory/all": {
+      "get": {
+        "tags": ["Client Estimation Category Routes"],
+        "summary": "Get all estimation categories",
+        "description": "Get all estimation categories",
+        "operationId": "getAllEstimationCategories",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Estimation Categories Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimationCategory/{id}": {
+      "get": {
+        "tags": ["Client Estimation Category Routes"],
+        "summary": "Get single estimation category",
+        "description": "Get single estimation category",
+        "operationId": "getEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation category to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimationCategory/create": {
+      "post": {
+        "tags": ["Client Estimation Category Routes"],
+        "summary": "Create a estimation category",
+        "description": "Create a estimation category",
+        "operationId": "createEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation category object that needs to be created estimation category",
+            "schema": {
+              "$ref": "#/definitions/EstimationCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category created successfully"
+          },
+          "400": {
+            "description": "Some estimation category field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimationCategory/{id}/update": {
+      "patch": {
+        "tags": ["Client Estimation Category Routes"],
+        "summary": "Update a estimation category",
+        "description": "Update a estimation category",
+        "operationId": "updateEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation category to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation category object that needs to be updated estimation category, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/EstimationCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category updated successfully"
+          },
+          "400": {
+            "description": "Some estimation category field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/estimationCategory/{id}/delete": {
+      "delete": {
+        "tags": ["Client Estimation Category Routes"],
+        "summary": "Delete a estimation category",
+        "description": "Delete a estimation category",
+        "operationId": "deleteEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation category to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/owner/estimationCategory/create": {
+      "post": {
+        "tags": ["Owner Estimation Category Routes"],
+        "summary": "Create a estimation category",
+        "description": "Create a estimation category",
+        "operationId": "createEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation category object that needs to be created estimation category",
+            "schema": {
+              "$ref": "#/definitions/EstimationCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category created successfully"
+          },
+          "400": {
+            "description": "Some estimation category field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimationCategory/{id}/update": {
+      "patch": {
+        "tags": ["Owner Estimation Category Routes"],
+        "summary": "Update a estimation category",
+        "description": "Update a estimation category",
+        "operationId": "updateEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation category to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation category object that needs to be updated estimation category, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/EstimationCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category updated successfully"
+          },
+          "400": {
+            "description": "Some estimation category field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/owner/estimationCategory/{id}/delete": {
+      "delete": {
+        "tags": ["Owner Estimation Category Routes"],
+        "summary": "Delete a estimation category",
+        "description": "Delete a estimation category",
+        "operationId": "deleteEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation category to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/equipment/all": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get all equipment consumption report",
+        "description": "Get all equipment consumption report",
+        "operationId": "getAllEquipmentConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Equipment consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/equipment/{id}": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get equipment consumption report",
+        "description": "Get equipment consumption report",
+        "operationId": "getEquipmentConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Equipment consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/equipment/{id}/update": {
+      "patch": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Update equipment consumption report",
+        "description": "Update equipment consumption report",
+        "operationId": "updateEquipmentConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment consumption report to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment consumption report object that needs to be updated equipment consumption report, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/EquipmentConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment consumption report updated successfully"
+          },
+          "400": {
+            "description": "Some equipment consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/consumption/report/equipment/{id}/delete": {
+      "delete": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Delete equipment consumption report",
+        "description": "Delete equipment consumption report",
+        "operationId": "deleteEquipmentConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment consumption report to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment consumption report deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/equipment/create": {
+      "post": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Create equipment consumption report",
+        "description": "Create equipment consumption report",
+        "operationId": "createEquipmentConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Equipment consumption report object that needs to be created equipment consumption report",
+            "schema": {
+              "$ref": "#/definitions/EquipmentConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment consumption report created successfully"
+          },
+          "400": {
+            "description": "Some equipment consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/consumption/report/material/all": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get all material consumption report",
+        "description": "Get all material consumption report",
+        "operationId": "getAllMaterialConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Material consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/material/{id}": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get material consumption report",
+        "description": "Get material consumption report",
+        "operationId": "getMaterialConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Material consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/material/{id}/update": {
+      "patch": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Update material consumption report",
+        "description": "Update material consumption report",
+        "operationId": "updateMaterialConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material consumption report to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material consumption report object that needs to be updated material consumption report, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/MaterialConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material consumption report updated successfully"
+          },
+          "400": {
+            "description": "Some material consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/material/{id}/delete": {
+      "delete": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Delete material consumption report",
+        "description": "Delete material consumption report",
+        "operationId": "deleteMaterialConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material consumption report to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material consumption report deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/material/create": {
+      "post": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Create material consumption report",
+        "description": "Create material consumption report",
+        "operationId": "createMaterialConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Material consumption report object that needs to be created material consumption report",
+            "schema": {
+              "$ref": "#/definitions/MaterialConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material consumption report created successfully"
+          },
+          "400": {
+            "description": "Some material consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/consumption/labour/report/all": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get all labour consumption report",
+        "description": "Get all labour consumption report",
+        "operationId": "getAllLabourConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Labour consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/labour/report/{id}": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get labour consumption report",
+        "description": "Get labour consumption report",
+        "operationId": "getLabourConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Labour consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/labour/report/{id}/update": {
+      "patch": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Update labour consumption report",
+        "description": "Update labour consumption report",
+        "operationId": "updateLabourConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour consumption report to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour consumption report object that needs to be updated labour consumption report, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/LabourConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour consumption report updated successfully"
+          },
+          "400": {
+            "description": "Some labour consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/labour/report/{id}/delete": {
+      "delete": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Delete labour consumption report",
+        "description": "Delete labour consumption report",
+        "operationId": "deleteLabourConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour consumption report to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour consumption report deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/labour/report/create": {
+      "post": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Create labour consumption report",
+        "description": "Create labour consumption report",
+        "operationId": "createLabourConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Labour consumption report object that needs to be created labour consumption report",
+            "schema": {
+              "$ref": "#/definitions/LabourConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour consumption report created successfully"
+          },
+          "400": {
+            "description": "Some labour consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/subcontractor/all": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get all subcontractor consumption report",
+        "description": "Get all subcontractor consumption report",
+        "operationId": "getAllSubcontractorConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Subcontractor consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/subcontractor/{id}": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get subcontractor consumption report",
+        "description": "Get subcontractor consumption report",
+        "operationId": "getSubcontractorConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Subcontractor consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/subcontractor/{id}/update": {
+      "patch": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Update subcontractor consumption report",
+        "description": "Update subcontractor consumption report",
+        "operationId": "updateSubcontractorConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor consumption report to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Subcontractor consumption report object that needs to be updated subcontractor consumption report, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/SubcontractorConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor consumption report updated successfully"
+          },
+          "400": {
+            "description": "Some subcontractor consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/subcontractor/{id}/delete": {
+      "delete": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Delete subcontractor consumption report",
+        "description": "Delete subcontractor consumption report",
+        "operationId": "deleteSubcontractorConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor consumption report to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor consumption report deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/subcontractor/create": {
+      "post": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Create subcontractor consumption report",
+        "description": "Create subcontractor consumption report",
+        "operationId": "createSubcontractorConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Subcontractor consumption report object that needs to be created subcontractor consumption report",
+            "schema": {
+              "$ref": "#/definitions/SubcontractorConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor consumption report created successfully"
+          },
+          "400": {
+            "description": "Some subcontractor consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/estimation/all": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get all estimation consumption report",
+        "description": "Get all estimation consumption report",
+        "operationId": "getAllEstimationConsumptionReport",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Estimation consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/estimation/{id}": {
+      "get": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Get estimation consumption report",
+        "description": "Get estimation consumption report",
+        "operationId": "getEstimationConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Estimation consumption report to retrieve",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation consumption report retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/estimation/{id}/update": {
+      "patch": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Update estimation consumption report",
+        "description": "Update estimation consumption report",
+        "operationId": "updateEstimationConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation consumption report to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation consumption report object that needs to be updated estimation consumption report, you can update one or more fields",
+            "schema": {
+              "$ref": "#/definitions/EstimationConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation consumption report updated successfully"
+          },
+          "400": {
+            "description": "Some estimation consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/estimation/{id}/delete": {
+      "delete": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Delete estimation consumption report",
+        "description": "Delete estimation consumption report",
+        "operationId": "deleteEstimationConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation consumption report to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation consumption report deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation consumption report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/consumption/report/estimation/create": {
+      "post": {
+        "tags": ["Consumption Report Routes"],
+        "summary": "Create estimation consumption report",
+        "description": "Create estimation consumption report",
+        "operationId": "createEstimationConsumptionReport",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Estimation consumption report object that needs to be created estimation consumption report",
+            "schema": {
+              "$ref": "#/definitions/EstimationConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation consumption report created successfully"
+          },
+          "400": {
+            "description": "Some estimation consumption report field is required"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/global/estimationCategory/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all estimation categories",
+        "description": "Get all estimation categories",
+        "operationId": "getAllEstimationCategories",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Estimation Categories Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/estimationCategory/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single estimation category",
+        "description": "Get single estimation category",
+        "operationId": "getEstimationCategory",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation category to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Category Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/estimation/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all estimations from our database",
+        "description": "Get all estimations from our database",
+        "operationId": "getAllEstimations",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Estimations Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/estimation/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single estimation from our database",
+        "description": "Get single estimation from our database",
+        "operationId": "getEstimation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the estimation to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estimation Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Estimation not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/equipment/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all equipment from our database",
+        "description": "Get all equipment from our database",
+        "operationId": "getAllEquipment",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Equipment Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/equipment/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single equipment from our database",
+        "description": "Get single equipment from our database",
+        "operationId": "getEquipment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the equipment to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipment Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Equipment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/material/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all materials from our database",
+        "description": "Get all materials from our database",
+        "operationId": "getAllMaterials",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Materials Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/material/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single material from our database",
+        "description": "Get single material from our database",
+        "operationId": "getMaterial",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the material to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Material Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/global/labour/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all labour from our database",
+        "description": "Get all labour from our database",
+        "operationId": "getAllLabour",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Labour Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/labour/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single labour from our database",
+        "description": "Get single labour from our database",
+        "operationId": "getLabour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the labour to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Labour Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Labour not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/global/subcontractor/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all subcontractors from our database",
+        "description": "Get all subcontractors from our database",
+        "operationId": "getAllSubcontractors",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Subcontractors Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/subcontractor/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single subcontractor from our database",
+        "description": "Get single subcontractor from our database",
+        "operationId": "getSubcontractor",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the subcontractor to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subcontractor Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Subcontractor not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/global/unit/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all units from our database",
+        "description": "Get all units from our database",
+        "operationId": "getAllUnits",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Units Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/unit/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single unit from our database",
+        "description": "Get single unit from our database",
+        "operationId": "getUnit",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the unit to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Unit not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/supplier/all": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get all suppliers from our database",
+        "description": "Get all suppliers from our database",
+        "operationId": "getAllSuppliers",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Suppliers Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/global/supplier/{id}": {
+      "get": {
+        "tags": ["Global Routes"],
+        "summary": "Get single supplier from our database",
+        "description": "Get single supplier from our database",
+        "operationId": "getSupplier",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the supplier to get",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Supplier not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "client": {
+          "type": "string"
+        },
+        "contractor": {
+          "type": "string"
+        },
+        "consultant": {
+          "type": "string"
+        },
+
+        "status": {
+          "type": "string",
+          "enum": [
+            "not started",
+            "on progress",
+            "suspended",
+            "canceled",
+            "completed"
+          ],
+          "default": "not started"
+        },
+        "outputAndPrice": {
+          "type": "string",
+          "enum": ["daily", "hourly"],
+          "default": "daily"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "ActivityName": {
+      "type": "object",
+      "properties": {
+        "activityName": {
+          "type": "string"
+        }
+      }
+    },
+    "EstimationName": {
+      "type": "object",
+      "properties": {
+        "estimationName": {
+          "type": "string"
+        }
+      }
+    },
+    "EstimationUpdate": {
+      "type": "object",
+      "properties": {
+        "wastagePercentage": {
+          "type": "number"
+        },
+        "transportPercentage": {
+          "type": "number"
+        },
+        "profitPercentage": {
+          "type": "number"
+        },
+        "overHeadPercentage": {
+          "type": "number"
+        },
+        "contigencyPercentage": {
+          "type": "number"
+        },
+        "estimationQuantity": {
+          "type": "number"
+        }
+      }
+    },
+    "EquipmentOrMaterial": {
+      "type": "object",
+      "properties": {
+        "equipmentName": {
+          "type": "string"
+        }
+      }
+    },
+
+    "EstimationCreate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "estimationUnit": {
+          "type": "string"
+        },
+        "estimationQuantity": {
+          "type": "number"
+        },
+        "categoryId": {
+          "type": "number"
+        }
+      }
+    },
+    "EstimationId": {
+      "type": "object",
+      "properties": {
+        "estimationId": {
+          "type": "number"
+        }
+      }
+    },
+    "UserEstimation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "estimationUnit": {
+          "type": "string"
+        },
+        "estimationQuantity": {
+          "type": "number"
+        },
+        "wastagePercentage": {
+          "type": "number"
+        },
+        "transportPercentage": {
+          "type": "number"
+        },
+        "overHeadPercentage": {
+          "type": "number"
+        },
+        "profitPercentage": {
+          "type": "number"
+        },
+        "contigencyPercentage": {
+          "type": "number"
+        }
+      }
+    },
+    "EquipmentOrMaterialId": {
+      "type": "object",
+      "properties": {
+        "equipmentId": {
+          "type": "number"
+        },
+        "materialId": {
+          "type": "number"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "UserVerify": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "UserResetPassword": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "UserRole": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "UserAccount": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        }
+      }
+    },
+    "UserForgotPassword": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "Equipment": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "caveragePerUnit": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "hireRatePrice": {
+          "type": "number"
+        },
+        "number": {
+          "type": "number"
+        },
+        "supplierId": {
+          "type": "number"
+        }
+      }
+    },
+    "Material": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "caveragePerUnit": {
+          "type": "number"
+        },
+        "price": {
+          "type": "number"
+        },
+        "supplierId": {
+          "type": "number"
+        }
+      }
+    },
+    "Labour": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "number": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "caveragePerUnit": {
+          "type": "number"
+        },
+        "wages": {
+          "type": "number"
+        }
+      }
+    },
+    "SubContractor": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        }
+      }
+    },
+    "Unit": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string"
+        },
+        "meaning": {
+          "type": "string"
+        }
+      }
+    },
+    "Supplier": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "projectId": {
+          "type": "number"
+        }
+      }
+    },
+    "EstimationCategory": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "isApproved": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "Activity": {
+      "type": "object",
+      "properties": {
+        "activityName": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateEquipmentEstimation": {
+      "type": "object",
+      "properties": {
+        "caveragePerUnit": {
+          "type": "number"
+        },
+        "equipmentName": {
+          "type": "string"
+        },
+        "equipmentPrice": {
+          "type": "number"
+        },
+        "editName": {
+          "type": "string"
+        },
+        "editUnit": {
+          "type": "string"
+        }
+      }
+    },
+    "AddMaterialEstimation": {
+      "type": "object",
+      "properties": {
+        "materialName": {
+          "type": "string"
+        }
+      }
+    },
+    "AddLabourEstimation": {
+      "type": "object",
+      "properties": {
+        "labourName": {
+          "type": "string"
+        }
+      }
+    },
+    "AddSubContractorEstimation": {
+      "type": "object",
+      "properties": {
+        "subcontractorName": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateMaterialEstimation": {
+      "type": "object",
+      "properties": {
+        "caveragePerUnit": {
+          "type": "number"
+        },
+        "materialName": {
+          "type": "string"
+        },
+        "materialPrice": {
+          "type": "number"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "editName": {
+          "type": "string"
+        },
+        "editUnit": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateLabourEstimation": {
+      "type": "object",
+      "properties": {
+        "caveragePerUnit": {
+          "type": "number"
+        },
+        "labourName": {
+          "type": "string"
+        },
+        "labourWages": {
+          "type": "number"
+        },
+        "number": {
+          "type": "number"
+        },
+        "editName": {
+          "type": "string"
+        },
+        "editUnit": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateSubcontractorEstimation": {
+      "properties": {
+        "subcontractorName": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "editName": {
+          "type": "string"
+        },
+        "editUnit": {
+          "type": "string"
+        }
+      }
+    },
+    "EquipmentConsumption": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "estimationId": {
+          "type": "number"
+        },
+        "consumedQuantity": {
+          "type": "number"
+        },
+        "consumedPrice": {
+          "type": "number"
+        },
+        "consumedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "equipmentId": {
+          "type": "number"
+        }
+      }
+    },
+    "MaterialConsumption": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "estimationId": {
+          "type": "number"
+        },
+        "consumedQuantity": {
+          "type": "number"
+        },
+        "consumedPrice": {
+          "type": "number"
+        },
+        "consumedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "materialId": {
+          "type": "number"
+        }
+      }
+    },
+    "LabourConsumption": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "estimationId": {
+          "type": "number"
+        },
+        "consumedQuantity": {
+          "type": "number"
+        },
+        "consumedPrice": {
+          "type": "number"
+        },
+        "consumedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "labourId": {
+          "type": "number"
+        }
+      }
+    },
+    "SubcontractorConsumption": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "estimationId": {
+          "type": "number"
+        },
+        "consumedQuantity": {
+          "type": "number"
+        },
+        "consumedPrice": {
+          "type": "number"
+        },
+        "consumedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "subcontractorId": {
+          "type": "number"
+        }
+      }
+    },
+    "EstimationConsumption": {
+      "type": "object",
+      "properties": {
+        "executedQuantity": {
+          "type": "number"
+        },
+        "executedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "estimationId": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,240 @@
+import express from "express";
+const router = express.Router();
+import { UserProjectController } from "../../../controllers";
+import {
+  Validators,
+  verifyAccessToken,
+  Exists,
+  ValidateParams,
+} from "../../../middlewares";
+
+// routes
+router.get("/all", verifyAccessToken, UserProjectController.getAllProjects);
+router.get(
+  "/:id",
+  verifyAccessToken,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectExists,
+  UserProjectController.getProjectById
+);
+router.post(
+  "/create",
+  verifyAccessToken,
+  Validators.isProjectInputValid,
+  UserProjectController.createProject
+);
+
+router.patch(
+  "/:id/update",
+  verifyAccessToken,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectExists,
+  Exists.isProjectApproved,
+  UserProjectController.editProject
+);
+
+router.patch(
+  "/:id/approve",
+  verifyAccessToken,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectExists,
+  UserProjectController.approveProject
+);
+router.patch(
+  "/:id/duplicate",
+  verifyAccessToken,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectExists,
+  UserProjectController.copyProjectData
+);
+router.delete(
+  "/:id/delete",
+  verifyAccessToken,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectExists,
+  UserProjectController.deleteProject
+);
+
+router.get(
+  "/:projectId/estimation/:id",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  UserProjectController.getProjectEstimationById
+);
+
+router.patch(
+  "/:projectId/estimation/:id/update",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isProjectExistsWithEstimation,
+  Exists.isUserEstimationExists,
+  UserProjectController.updateEstimation
+);
+
+router.patch(
+  "/:projectId/estimation/:id/equipment/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isProjectExistsWithEstimation,
+  UserProjectController.addEquipmentToProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/equipment/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isProjectExistsWithEstimation,
+  UserProjectController.removeEquipmentFromProjectEstimation
+);
+router.patch(
+  "/:projectId/activity/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  UserProjectController.addProjectActivity
+);
+router.patch(
+  "/:projectId/activity/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  UserProjectController.removeActivityFromProject
+);
+router.patch(
+  "/:projectId/estimation/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  UserProjectController.addEstimationToProject
+);
+router.patch(
+  "/:projectId/estimation/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  UserProjectController.removeEstimationFromProject
+);
+
+// equipments
+router.patch(
+  "/:projectId/estimation/:id/equipment/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.addEquipmentToProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/equipment/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.removeEquipmentFromProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/equipment/edit",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.editProjectEstimationEquipment
+);
+
+// materials
+router.patch(
+  "/:projectId/estimation/:id/material/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.addMaterialToProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/material/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.removeMaterialFromProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/material/edit",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.editProjectEstimationMaterials
+);
+
+// labor
+router.patch(
+  "/:projectId/estimation/:id/labour/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.addLabourToProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/labour/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.removeLabourFromProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/labour/edit",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.editLabourProjectEstimation
+);
+
+// subcontractors
+router.patch(
+  "/:projectId/estimation/:id/subcontractor/add",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.addSubcontractorToProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/subcontractor/remove",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.removeSubcontractorFromProjectEstimation
+);
+router.patch(
+  "/:projectId/estimation/:id/subcontractor/edit",
+  verifyAccessToken,
+  ValidateParams.isProjectIdPresentAndValid,
+  ValidateParams.isIdPresentAndValid,
+  Exists.isProjectAlreadyApproved,
+  Exists.isUserEstimationExists,
+  UserProjectController.editSubcontractorProjectEstimation
+);
+
+export default router;

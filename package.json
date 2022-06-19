@@ -1,0 +1,53 @@
+{
+  "name": "ds-backend",
+  "version": "1.0.0",
+  "description": "DS ESTIMATION software",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "npx sequelize db:migrate",
+    "migrate:undo": "npx sequelize db:migrate:undo:all",
+    "migrate:test": "npx sequelize db:migrate --env test",
+    "droptables:dev": "npx sequelize db:migrate:undo:all",
+    "db:seed:test": "cross-env NODE_ENV=test sequelize db:seed:all",
+    "seed": "npm run migrate:undo && npm run migrate && npx sequelize db:seed:all",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s",
+    "build": "npm run migrate && npm run clean && babel ./src --out-dir build",
+    "start": "node build",
+    "test": "cross-env NODE_ENV=test jest src/tests --detectOpenHandles",
+    "dev": "nodemon --exec ./node_modules/.bin/babel-node src",
+    "coverage": "nyc npm test && nyc report --reporter=lcov",
+    "seed:test": "npm run migrate:undo -- --env test && npm run migrate:test && npx sequelize db:seed:all --env test"
+  },
+  "author": "Ndatimana Gilbert, Habimana Fiston",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.6.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mailgen": "^2.0.21",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "redis": "^4.0.6",
+    "sequelize": "^6.17.0",
+    "sequelize-cli": "^6.4.1",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/register": "^7.17.7",
+    "babel-polyfill": "^6.26.0",
+    "coveralls": "^3.1.1",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2",
+    "turbo": "^1.2.6"
+  }
+}
